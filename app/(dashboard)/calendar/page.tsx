@@ -166,7 +166,7 @@ export default function ContentCalendarPage() {
                   return (
                     <div
                       key={i}
-                      className={`min-h-[110px] rounded-lg border p-2.5 flex flex-col justify-between transition-all ${
+                      className={`min-h-[72px] rounded-lg border p-1.5 flex flex-col justify-between transition-colors sm:min-h-[110px] sm:p-2.5 ${
                         matchingPost
                           ? "border-blue-500/40 bg-blue-950/20 cursor-pointer hover:border-blue-400"
                           : "border-slate-800/80 bg-slate-950/40 hover:border-slate-700"

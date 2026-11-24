@@ -1,9 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import { BarChart3, TrendingUp, Users, Eye, ArrowUpRight } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 
 export default function AnalyticsPage() {
   return (
@@ -17,23 +15,38 @@ export default function AnalyticsPage() {
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
         <Card className="p-5">
-          <p className="text-xs font-medium text-slate-400">Total Reach</p>
-          <h3 className="text-3xl font-bold mt-2 text-slate-100">68,420</h3>
-          <p className="text-xs text-emerald-400 mt-1 flex items-center gap-1">
+          <div className="flex items-start justify-between">
+            <p className="text-xs font-medium text-slate-400">Total Reach</p>
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 text-blue-700">
+              <Eye className="h-4 w-4" />
+            </div>
+          </div>
+          <h3 className="mt-2 text-3xl font-bold text-slate-100">68,420</h3>
+          <p className="mt-1 flex items-center gap-1 text-xs text-emerald-400">
             <ArrowUpRight className="h-3 w-3" /> +15.4% this month
           </p>
         </Card>
         <Card className="p-5">
-          <p className="text-xs font-medium text-slate-400">Total Engagements</p>
-          <h3 className="text-3xl font-bold mt-2 text-slate-100">4,120</h3>
-          <p className="text-xs text-emerald-400 mt-1 flex items-center gap-1">
+          <div className="flex items-start justify-between">
+            <p className="text-xs font-medium text-slate-400">Total Engagements</p>
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 text-blue-700">
+              <TrendingUp className="h-4 w-4" />
+            </div>
+          </div>
+          <h3 className="mt-2 text-3xl font-bold text-slate-100">4,120</h3>
+          <p className="mt-1 flex items-center gap-1 text-xs text-emerald-400">
             <ArrowUpRight className="h-3 w-3" /> +8.2% this month
           </p>
         </Card>
         <Card className="p-5">
-          <p className="text-xs font-medium text-slate-400">Profile Conversion</p>
-          <h3 className="text-3xl font-bold mt-2 text-slate-100">4.2%</h3>
-          <p className="text-xs text-emerald-400 mt-1 flex items-center gap-1">
+          <div className="flex items-start justify-between">
+            <p className="text-xs font-medium text-slate-400">Profile Conversion</p>
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 text-blue-700">
+              <Users className="h-4 w-4" />
+            </div>
+          </div>
+          <h3 className="mt-2 text-3xl font-bold text-slate-100">4.2%</h3>
+          <p className="mt-1 flex items-center gap-1 text-xs text-emerald-400">
             <ArrowUpRight className="h-3 w-3" /> +0.5% this month
           </p>
         </Card>
@@ -41,7 +54,10 @@ export default function AnalyticsPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Content Performance Breakdown</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            <BarChart3 className="h-4 w-4 text-blue-700" />
+            Content Performance Breakdown
+          </CardTitle>
           <CardDescription>Impressions and likes per published post</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -50,14 +66,26 @@ export default function AnalyticsPage() {
             { title: "The Future of Next.js App Router Architecture", impressions: "12.8K", likes: "285", comments: "38", rate: "7.9%" },
             { title: "Building High-Performance Engineering Teams", impressions: "9.4K", likes: "192", comments: "21", rate: "6.4%" },
           ].map((item, i) => (
-            <div key={i} className="flex items-center justify-between p-4 rounded-lg bg-slate-950/60 border border-slate-800">
-              <div className="space-y-1">
+            <div key={i} className="flex flex-col gap-4 rounded-lg border border-slate-200 bg-slate-50 p-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="min-w-0 space-y-1">
                 <h4 className="text-sm font-medium text-slate-200">{item.title}</h4>
                 <p className="text-xs text-slate-400">Impressions: {item.impressions} • Comments: {item.comments}</p>
               </div>
-              <div className="text-right">
-                <span className="text-sm font-bold text-blue-400">{item.rate}</span>
-                <span className="text-[10px] text-slate-500 block">Engagement Rate</span>
+              <div className="w-full shrink-0 sm:w-40">
+                <div className="mb-1.5 flex items-center justify-between">
+                  <span className="text-[10px] font-medium text-slate-500">Engagement rate</span>
+                  <span className="text-sm font-semibold text-blue-700">{item.rate}</span>
+                </div>
+                <div
+                  className="h-1.5 overflow-hidden rounded-full bg-slate-200"
+                  role="img"
+                  aria-label={`${item.rate} engagement rate`}
+                >
+                  <div
+                    className="h-full rounded-full bg-blue-600"
+                    style={{ width: `${Number.parseFloat(item.rate) * 10}%` }}
+                  />
+                </div>
               </div>
             </div>
           ))}

@@ -95,8 +95,8 @@ export default function NetworkingPage() {
           <h1 className="text-3xl font-bold tracking-tight text-slate-100">Networking Assistant</h1>
           <p className="text-slate-400 mt-1 text-sm">Discover and connect with high-impact professionals in your industry.</p>
         </div>
-        <div className="flex items-center gap-3">
-          <Input icon={<Search className="h-4 w-4" />} placeholder="Search names, titles, companies..." className="w-64" />
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <Input icon={<Search className="h-4 w-4" />} placeholder="Search names, titles, companies..." className="w-full sm:w-64" />
           <Button variant="secondary"><Filter className="h-4 w-4" /> Filters</Button>
         </div>
       </div>

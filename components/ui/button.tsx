@@ -10,21 +10,21 @@ export interface ButtonProps
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = "default", size = "md", children, ...props }, ref) => {
     const baseStyles =
-      "inline-flex items-center justify-center font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none rounded-lg cursor-pointer";
+      "inline-flex items-center justify-center rounded-lg font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 cursor-pointer";
 
     const variants = {
       default:
-        "bg-blue-600 hover:bg-blue-500 text-white shadow-md shadow-blue-900/20 active:scale-[0.98]",
+        "bg-[#0a66c2] hover:bg-[#084f96] text-white shadow-sm shadow-blue-900/10",
       glow:
-        "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-lg shadow-blue-500/25 border border-blue-400/30 active:scale-[0.98]",
+        "bg-[#0a66c2] hover:bg-[#084f96] text-white shadow-sm shadow-blue-900/10",
       outline:
-        "border border-slate-800 bg-slate-900/50 hover:bg-slate-800/80 hover:border-slate-700 text-slate-200",
+        "border border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 text-slate-700",
       secondary:
-        "bg-slate-800/80 hover:bg-slate-700 text-slate-200 border border-slate-700/50",
+        "bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200",
       ghost:
-        "hover:bg-slate-800/60 text-slate-300 hover:text-white",
+        "hover:bg-slate-100 text-slate-600 hover:text-slate-900",
       danger:
-        "bg-red-600/20 hover:bg-red-600/30 text-red-400 border border-red-500/30",
+        "bg-red-50 hover:bg-red-100 text-red-700 border border-red-200",
     };
 
     const sizes = {
