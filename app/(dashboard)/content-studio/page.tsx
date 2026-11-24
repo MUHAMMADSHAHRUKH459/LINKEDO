@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Sparkles, Copy, Send, Check, History, LayoutTemplate, Eye, RefreshCw, Loader2, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
 import { savePost, getPosts, deletePost } from "@/lib/actions/posts";
 import { generatePostContent } from "@/lib/actions/ai";
+import { publishPostToLinkedIn } from "@/lib/actions/linkedin";
 
 export default function ContentStudioPage() {
   const [topic, setTopic] = useState("");
@@ -17,18 +18,30 @@ export default function ContentStudioPage() {
   const [postContent, setPostContent] = useState("");
   const [postId, setPostId] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isPublishing, setIsPublishing] = useState(false);
+  const [publishSuccess, setPublishSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [deletingId, setDeletingId] = useState('');
 
   const [drafts, setDrafts] = useState<any[]>([]);
+
+  useEffect(() => {
+    async function loadDrafts() {
+      const initialDrafts = await getPosts();
+      setDrafts(initialDrafts);
+    }
+    loadDrafts();
+  }, []);
 
   // Generate AI content without saving to database
 const handleGenerate = async () => {
   if (!topic) return;
   setIsGenerating(true);
   setError(null);
+  setPublishSuccess(false);
   try {
     const result = await generatePostContent(topic, tone);
     setPostContent(result);
@@ -40,9 +53,10 @@ const handleGenerate = async () => {
 };
 
 const handleSaveDraft = async () => {
-    if (!topic) return;
+    if (!topic || !postContent) return;
     setIsGenerating(true);
     setError(null);
+    setPublishSuccess(false);
     try {
       const formData = new FormData();
       if (postId) formData.append('id', postId);
@@ -50,13 +64,49 @@ const handleSaveDraft = async () => {
       formData.append('content', postContent);
       formData.append('status', 'Draft');
 
-      await savePost(formData);
+      const savedId = await savePost(formData);
+      if (savedId) setPostId(savedId);
+
       const updatedDrafts = await getPosts();
       setDrafts(updatedDrafts);
     } catch (err: any) {
       setError(err.message || "Failed to save draft.");
     } finally {
       setIsGenerating(false);
+    }
+  };
+
+  const handlePublish = async () => {
+    if (!postContent) return;
+
+    setIsPublishing(true);
+    setError(null);
+    setPublishSuccess(false);
+
+    try {
+      // 1. Ensure it's saved as a draft first to get/update DB record
+      const formData = new FormData();
+      if (postId) formData.append('id', postId);
+      formData.append('title', topic || "Untitled LinkedIn Post");
+      formData.append('content', postContent);
+      formData.append('status', 'Draft'); // Temporarily draft
+
+      const id = await savePost(formData);
+      const currentPostId = id || postId;
+
+      if (!currentPostId) throw new Error("Could not save post before publishing.");
+      setPostId(currentPostId);
+
+      // 2. Publish to LinkedIn
+      await publishPostToLinkedIn(currentPostId);
+
+      setPublishSuccess(true);
+      const updatedDrafts = await getPosts();
+      setDrafts(updatedDrafts);
+    } catch (err: any) {
+      setError(err.message || "Failed to publish to LinkedIn.");
+    } finally {
+      setIsPublishing(false);
     }
   };
 
@@ -186,9 +236,15 @@ const handleSaveDraft = async () => {
                   {postContent.length} characters • Optimized for LinkedIn algorithm
                 </span>
                 <div className="flex gap-2">
-                  <Button variant="secondary" size="md">Save as Draft</Button>
-                  <Button variant="default" size="md">
-                    <Send className="h-4 w-4" /> Schedule / Publish
+                  <Button variant="secondary" size="md" onClick={handleSaveDraft}>Save as Draft</Button>
+                  <Button variant="default" size="md" onClick={handlePublish} disabled={isPublishing || !postContent}>
+                    {isPublishing ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <>
+                        <Send className="h-4 w-4" /> Publish
+                      </>
+                    )}
                   </Button>
                 </div>
               </div>

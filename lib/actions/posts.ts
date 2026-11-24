@@ -39,7 +39,7 @@ export async function savePost(formData: FormData) {
 
   if (postId) {
     // Update existing post
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('posts')
       .update({
         title,
@@ -49,12 +49,15 @@ export async function savePost(formData: FormData) {
         updated_at: new Date().toISOString(),
       })
       .eq('id', postId)
-      .eq('user_id', user.id);
+      .eq('user_id', user.id)
+      .select('id')
+      .single();
 
     if (error) throw new Error(`Update failed: ${error.message}`);
+    return data.id;
   } else {
     // Create new post
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('posts')
       .insert({
         user_id: user.id,
@@ -62,9 +65,12 @@ export async function savePost(formData: FormData) {
         content,
         status,
         scheduled_at: scheduled_at ? new Date(scheduled_at).toISOString() : null,
-      });
+      })
+      .select('id')
+      .single();
 
     if (error) throw new Error(`Insert failed: ${error.message}`);
+    return data.id;
   }
 
   revalidatePath('/calendar');
