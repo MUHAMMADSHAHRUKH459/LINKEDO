@@ -56,8 +56,16 @@ export default function SettingsPage() {
             {checking ? (
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : linkedInConnected ? (
-              <div className="flex items-center gap-2 text-emerald-400">
-                <Check className="h-4 w-4" /> Account Connected
+              <div className="space-y-3">
+                <div className="flex items-center gap-2 text-emerald-400">
+                  <Check className="h-4 w-4" /> Account Connected
+                </div>
+                <p className="text-xs text-slate-400">
+                  Reconnect to request LinkedIn comment read and publish permissions. These permissions must also be approved for your LinkedIn app.
+                </p>
+                <Button onClick={handleLinkedInConnect} variant="outline" className="gap-2">
+                  <LinkedinIcon className="h-4 w-4" /> Reconnect LinkedIn
+                </Button>
               </div>
             ) : (
               <Button onClick={handleLinkedInConnect} variant="outline" className="gap-2">

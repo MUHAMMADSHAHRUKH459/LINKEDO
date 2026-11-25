@@ -16,7 +16,10 @@ export async function GET(request: NextRequest) {
   authUrl.searchParams.append('client_id', process.env.LINKEDIN_CLIENT_ID!);
   authUrl.searchParams.append('redirect_uri', `${process.env.NEXT_PUBLIC_SITE_URL}/api/auth/linkedin/callback`);
   authUrl.searchParams.append('state', state);
-  authUrl.searchParams.append('scope', 'openid profile email w_member_social');
+  authUrl.searchParams.append(
+    'scope',
+    'openid profile email w_member_social r_member_social_feed w_member_social_feed',
+  );
 
   const response = NextResponse.redirect(authUrl.toString());
   response.cookies.set('linkedin_oauth_state', state, {

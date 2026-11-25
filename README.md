@@ -137,6 +137,13 @@ project-root/
 - Advanced LinkedIn API integrations (beyond basic posting) require additional configuration
 - Free model limitations may affect advanced AI features
 
+## Engagement Assistant setup
+
+- The LinkedIn OAuth flow requests `r_member_social_feed` to read comments and `w_member_social_feed` to publish replies, in addition to the existing `w_member_social` post permission. The LinkedIn developer app must have these permissions approved; requesting a scope alone does not grant API access. After enabling them, reconnect LinkedIn from Settings to issue a token with the updated scopes.
+- Comment sync reads comments from the latest 25 posts published through this app. If comment-reading access is unavailable, users can paste a comment to generate and edit a reply, but that manual draft is not linked to a LinkedIn comment and cannot be published through the API.
+- Apply `supabase/migrations/20261125000000_engagement_linkedin_comments.sql` to the Supabase database before deploying this version. It adds comment URNs and the atomic publishing state to the existing comments table; it does not create another table.
+- Configure an OpenRouter API key in Settings to generate AI replies. Publishing remains an explicit per-comment action.
+
 ## Future Enhancements
 - Scheduled post publishing via LinkedIn API
 - Enhanced real-time analytics dashboard
