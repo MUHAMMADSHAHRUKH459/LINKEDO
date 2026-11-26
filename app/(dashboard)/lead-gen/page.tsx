@@ -1,16 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Building2, Download, Plus, Trash2, CheckCircle2, AlertCircle, Briefcase, Link as LinkIcon } from "lucide-react";
+import { Trash2, CheckCircle2, AlertCircle, Briefcase, Link as LinkIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Modal } from "@/components/ui/modal";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import {
-  getTargetCompanies,
-  addTargetCompany,
-  deleteTargetCompany,
-} from "@/lib/actions/lead-gen";
 import {
   getJobLeads,
   discoverJobLeads,
@@ -20,16 +14,31 @@ import {
 } from "@/lib/actions/job-leads";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import BusinessLeads from "@/components/lead-gen/business-leads";
 
 type EmploymentType = 'Any' | 'Full-time' | 'Part-time' | 'Contract' | 'Internship';
+type SavedJobLead = {
+  id: string;
+  job_title: string;
+  employer_name: string;
+  location: string | null;
+  verification_status: string;
+};
+type JobSearchResult = {
+  employer_name: string;
+  job_title: string;
+  location: string;
+  employment_type: string;
+  source_name: string;
+  source_url: string;
+  description: string;
+  verification_status?: string;
+};
 
 export default function LeadGenPage() {
-  const [targetCompanies, setTargetCompanies] = useState<any[]>([]);
-  const [jobLeads, setJobLeads] = useState<any[]>([]);
-  const [searchResults, setSearchResults] = useState<any[]>([]);
-  const [isLoadingCompanies, setIsLoadingCompanies] = useState(true);
+  const [jobLeads, setJobLeads] = useState<SavedJobLead[]>([]);
+  const [searchResults, setSearchResults] = useState<JobSearchResult[]>([]);
   const [isLoadingJobs, setIsLoadingJobs] = useState(false);
-  const [fetchErrorCompanies, setFetchErrorCompanies] = useState<string | null>(null);
   const [fetchErrorJobs, setFetchErrorJobs] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -41,22 +50,8 @@ export default function LeadGenPage() {
   });
 
   useEffect(() => {
-    loadCompanies();
     loadJobs();
   }, []);
-
-  async function loadCompanies() {
-    try {
-      setIsLoadingCompanies(true);
-      setFetchErrorCompanies(null);
-      const data = await getTargetCompanies();
-      setTargetCompanies(data);
-    } catch (err: any) {
-      setFetchErrorCompanies(err.message || 'Failed to load target companies');
-    } finally {
-      setIsLoadingCompanies(false);
-    }
-  }
 
   async function loadJobs() {
     try {
@@ -64,8 +59,8 @@ export default function LeadGenPage() {
       setFetchErrorJobs(null);
       const data = await getJobLeads();
       setJobLeads(data);
-    } catch (err: any) {
-      setFetchErrorJobs(err.message || 'Failed to load job leads');
+    } catch (error) {
+      setFetchErrorJobs(getErrorMessage(error, 'Failed to load job leads'));
     } finally {
       setIsLoadingJobs(false);
     }
@@ -84,14 +79,14 @@ export default function LeadGenPage() {
       };
       const results = await discoverJobLeads(params);
       setSearchResults(results);
-    } catch (err: any) {
-      setFetchErrorJobs(err.message || 'Job search failed');
+    } catch (error) {
+      setFetchErrorJobs(getErrorMessage(error, 'Job search failed'));
     } finally {
       setIsLoadingJobs(false);
     }
   };
 
-  const handleAddJobLead = async (job: any) => {
+  const handleAddJobLead = async (job: JobSearchResult) => {
     try {
       setErrorMessage(null);
       setSuccessMessage(null);
@@ -108,20 +103,8 @@ export default function LeadGenPage() {
       setSuccessMessage('Job lead saved successfully');
       // Refresh saved jobs after adding
       loadJobs();
-    } catch (err: any) {
-      setErrorMessage(err.message || 'Failed to save job lead');
-    }
-  };
-
-  const handleDeleteTargetCompany = async (id: string) => {
-    try {
-      setErrorMessage(null);
-      setSuccessMessage(null);
-      await deleteTargetCompany(id);
-      setSuccessMessage('Target company deleted successfully');
-      loadCompanies();
-    } catch (err: any) {
-      setErrorMessage(err.message || 'Failed to delete target company');
+    } catch (error) {
+      setErrorMessage(getErrorMessage(error, 'Failed to save job lead'));
     }
   };
 
@@ -132,8 +115,8 @@ export default function LeadGenPage() {
       await deleteJobLead(id);
       setSuccessMessage('Job lead deleted successfully');
       loadJobs();
-    } catch (err: any) {
-      setErrorMessage(err.message || 'Failed to delete job lead');
+    } catch (error) {
+      setErrorMessage(getErrorMessage(error, 'Failed to delete job lead'));
     }
   };
 
@@ -143,24 +126,22 @@ export default function LeadGenPage() {
       const result = await verifyJobLead(id);
       setSuccessMessage(`Job lead marked ${result.status}`);
       loadJobs();
-    } catch (err: any) {
-      setErrorMessage(err.message || 'Verification failed');
+    } catch (error) {
+      setErrorMessage(getErrorMessage(error, 'Verification failed'));
     }
   };
 
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
-      {/* Target Companies Section */}
+      {/* Lead Generation */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-800/80">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-slate-100">Lead Generation</h1>
-          <p className="text-slate-400 mt-1 text-sm">Manage target companies and job leads.</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <AddTargetCompanyModal onAdded={loadCompanies} onError={(msg) => setErrorMessage(msg)} />
-          <ExportCSVButton targetCompanies={targetCompanies} />
+          <p className="text-slate-400 mt-1 text-sm">Manage business prospects and job leads.</p>
         </div>
       </div>
+
+      <BusinessLeads />
 
       {/* Job Leads Search Section */}
       <div className="pb-6 border-b border-slate-800/80">
@@ -312,107 +293,10 @@ export default function LeadGenPage() {
       )}
       </div>
 
-      {/* Target Companies List */}
-      <div>
-        <h3 className="text-xl font-bold mb-4 text-slate-100">Target Companies</h3>
-        {isLoadingCompanies ? (
-          <div className="grid grid-cols-1 gap-4">
-            {[...Array(3)].map((_, i) => (
-              <div key={i} className="p-4 rounded-xl border border-slate-800 animate-pulse bg-slate-900/50">
-                <div className="h-4 bg-slate-800 rounded w-1/3 mb-2"></div>
-              </div>
-            ))}
-          </div>
-        ) : fetchErrorCompanies ? (
-          <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-xl flex items-center gap-2">
-            <AlertCircle className="h-5 w-5 shrink-0" />
-            <span>{fetchErrorCompanies}</span>
-          </div>
-        ) : targetCompanies.length === 0 ? (
-          <p className="text-slate-400 text-center py-8">No target companies added yet.</p>
-        ) : (
-          <div className="grid grid-cols-1 gap-4">
-            {targetCompanies.map((company) => (
-              <Card key={company.id} className="p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-900 border-slate-800">
-                <div className="flex items-center gap-4">
-                  <div className="h-10 w-10 rounded-lg bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400 font-bold">
-                    <Building2 className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-slate-100">{company.name}</h4>
-                    <p className="text-xs text-slate-400">{company.industry} • {company.website || 'No website'}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <Badge variant={company.status === 'Closed' ? 'default' : 'secondary'}>
-                    {company.status}
-                  </Badge>
-                  <Button variant="ghost" size="icon" onClick={() => handleDeleteTargetCompany(company.id)} className="text-slate-400 hover:text-red-400">
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </Card>
-            ))}
-          </div>
-        )}
-      </div>
     </div>
   );
 }
 
-const AddTargetCompanyModal = ({ onAdded, onError }: { onAdded: () => void; onError: (msg: string) => void }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    try {
-      await addTargetCompany(new FormData(e.currentTarget));
-      onAdded();
-      setIsOpen(false);
-    } catch (err: any) {
-      onError(err.message || 'Failed to add company');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  return (
-    <>
-      <Button onClick={() => setIsOpen(true)} className="gap-2">
-        <Plus className="h-4 w-4" /> Add Company
-      </Button>
-      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Add Target Company">
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <Input name="name" placeholder="Company Name" required />
-          <Input name="industry" placeholder="Industry" />
-          <Input name="website" placeholder="Website URL" />
-          <Button type="submit" disabled={isSubmitting} className="w-full">
-            {isSubmitting ? 'Saving...' : 'Save Company'}
-          </Button>
-        </form>
-      </Modal>
-    </>
-  );
-};
-
-const ExportCSVButton = ({ targetCompanies }: { targetCompanies: any[] }) => {
-  const exportCSV = () => {
-    const headers = ['Company Name', 'Industry', 'Website', 'Status'];
-    const rows = targetCompanies.map(c => [c.name, c.industry, c.website, c.status]);
-    const csvContent = [headers, ...rows].map(r => r.join(',')).join('\n');
-    const blob = new Blob([csvContent], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'target_companies.csv';
-    link.click();
-  };
-
-  return (
-    <Button variant="outline" onClick={exportCSV} className="gap-2">
-      <Download className="h-4 w-4" /> Export CSV
-    </Button>
-  );
-};
+function getErrorMessage(error: unknown, fallback: string) {
+  return error instanceof Error ? error.message : fallback;
+}

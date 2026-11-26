@@ -48,8 +48,10 @@ LinkedIn AI Studio is a comprehensive dashboard for LinkedIn content management,
    - User interaction insights
 
 6. **Lead Generation**
-   - Automated lead discovery
-   - AI-powered lead scoring
+   - Manually entered or CSV-imported business prospects
+   - Company contacts, editable pipeline, search and filters
+   - Transparent deterministic lead scoring based on saved fit criteria
+   - Separate Greenhouse Job Finder for job discovery
 
 7. **Overview & Settings**
    - Dashboard analytics overview
@@ -143,6 +145,12 @@ project-root/
 - Comment sync reads comments from the latest 25 posts published through this app. If comment-reading access is unavailable, users can paste a comment to generate and edit a reply, but that manual draft is not linked to a LinkedIn comment and cannot be published through the API.
 - Apply `supabase/migrations/20261125000000_engagement_linkedin_comments.sql` to the Supabase database before deploying this version. It adds comment URNs and the atomic publishing state to the existing comments table; it does not create another table.
 - Configure an OpenRouter API key in Settings to generate AI replies. Publishing remains an explicit per-comment action.
+
+## Business Lead Generation setup
+
+- Apply `supabase/migrations/20261125000001_business_lead_mvp.sql` to Supabase before deploying this version. It extends `target_companies`, adds per-user scoring criteria to `profiles`, creates the user-scoped `company_contacts` table, and maps legacy Prospect/Engaged stages while preserving Closed records. Do not run this migration against remote Supabase without the project owner's approval.
+- Business prospects are entered manually or imported from CSV. Contact information must be user-supplied or obtained from a permitted source; this feature does not scrape LinkedIn or discover contacts automatically.
+- The Greenhouse Job Finder remains separate from the business prospect workflow and is unchanged.
 
 ## Future Enhancements
 - Scheduled post publishing via LinkedIn API

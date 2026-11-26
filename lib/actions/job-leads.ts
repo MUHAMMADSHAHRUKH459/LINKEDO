@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
+import { requestGreenhouseJobUrl, validateGreenhouseJobUrl } from './job-lead-url';
 
 /**
  * Universal Job Search Parameters interface.
@@ -198,33 +199,17 @@ export async function verifyJobLead(id: string) {
   if (error || !lead) throw new Error('Job lead not found');
 
   let verificationStatus = 'Unverified';
+  const sourceUrl = validateGreenhouseJobUrl(lead.source_url);
 
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000);
-
-    const response = await fetch(lead.source_url, {
-      method: 'GET', // Using GET to check if the listing content still matches
-      headers: { 'User-Agent': 'LinkedInAIStudio/1.0' },
-      signal: controller.signal
-    });
-
-    clearTimeout(timeoutId);
-
-    if (response.ok) {
-      // Still returns 200, so keep as Unverified (requires human or deeper structural check)
-      verificationStatus = 'Unverified';
-    } else if (response.status === 404 || response.status === 410) {
-      // Explicit "Not Found" or "Gone" - likely expired, but we keep it conservative
-      // A 404 could still be a temporary issue on some sites.
-      verificationStatus = 'Expired';
-    } else {
-      // 429 (rate limit), 5xx (server error), etc. -> keep Unverified
-      verificationStatus = 'Unverified';
+  if (sourceUrl) {
+    try {
+      const status = await requestGreenhouseJobUrl(sourceUrl.href);
+      if (status === 404 || status === 410) {
+        verificationStatus = 'Expired';
+      }
+    } catch {
+      // Network failures and timeouts remain conservatively unverified.
     }
-  } catch (err) {
-    // Network timeout or abort -> keep Unverified
-    verificationStatus = 'Unverified';
   }
 
   const { error: updateError } = await supabase
@@ -256,12 +241,17 @@ export async function addJobLead(data: {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error('Unauthorized');
 
+  const sourceUrl = validateGreenhouseJobUrl(data.source_url);
+  if (!sourceUrl) {
+    throw new Error('Only HTTPS Greenhouse job URLs are allowed');
+  }
+
   // Prevent duplicates for the same user and job URL
   const { data: existing, error: checkError } = await supabase
     .from('job_leads')
     .select('id')
     .eq('user_id', user.id)
-    .eq('source_url', data.source_url)
+    .eq('source_url', sourceUrl.href)
     .maybeSingle();
 
   if (checkError) {
@@ -275,6 +265,7 @@ export async function addJobLead(data: {
   const { error } = await supabase.from('job_leads').insert({
     user_id: user.id,
     ...data,
+    source_url: sourceUrl.href,
     verification_status: 'Unverified',
   });
 
