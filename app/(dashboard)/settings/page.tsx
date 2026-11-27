@@ -36,7 +36,7 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-300">
+    <div className="space-y-7 animate-in fade-in duration-300">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-800/80">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-slate-100">Settings</h1>
@@ -57,7 +57,7 @@ export default function SettingsPage() {
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : linkedInConnected ? (
               <div className="space-y-3">
-                <div className="flex items-center gap-2 text-emerald-400">
+                <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-500/10 px-3 py-1.5 text-sm font-medium text-emerald-300">
                   <Check className="h-4 w-4" /> Account Connected
                 </div>
                 <p className="text-xs text-slate-400">

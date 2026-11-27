@@ -78,7 +78,7 @@ export default function ContentCalendarPage() {
   };
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-300">
+    <div className="space-y-7 animate-in fade-in duration-300">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-800/80">
         <div>
           <div className="flex items-center gap-2">
@@ -89,8 +89,8 @@ export default function ContentCalendarPage() {
             Organize, schedule, and preview your upcoming LinkedIn publishing pipeline.
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <div className="flex rounded-lg border border-slate-800 bg-slate-950/60 p-1">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <div className="flex w-fit rounded-lg border border-slate-700/70 bg-slate-950/50 p-1">
             <button
               onClick={() => setCurrentView("calendar")}
               className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
@@ -131,7 +131,7 @@ export default function ContentCalendarPage() {
         </div>
       ) : currentView === "calendar" ? (
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-4">
+          <CardHeader className="flex flex-wrap items-center justify-between gap-3 pb-4">
             <div className="flex items-center gap-3">
               <CardTitle className="text-xl">November 2026</CardTitle>
               <div className="flex items-center gap-1">
@@ -139,7 +139,7 @@ export default function ContentCalendarPage() {
                 <Button variant="outline" size="icon" className="h-7 w-7"><ChevronRight className="h-4 w-4" /></Button>
               </div>
             </div>
-            <div className="flex items-center gap-2 text-xs text-slate-400">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-400">
               <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-blue-500"></span> Scheduled</span>
               <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-amber-500"></span> Draft</span>
             </div>
@@ -150,7 +150,7 @@ export default function ContentCalendarPage() {
                 No scheduled posts found. Click &quot;Schedule Post&quot; to add content.
               </div>
             ) : (
-              <div className="grid grid-cols-7 gap-2">
+              <div className="grid grid-cols-7 gap-1 sm:gap-2">
                 {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day) => (
                   <div key={day} className="text-center text-xs font-semibold text-slate-500 py-2">
                     {day}
@@ -166,7 +166,7 @@ export default function ContentCalendarPage() {
                   return (
                     <div
                       key={i}
-                      className={`min-h-[72px] rounded-lg border p-1.5 flex flex-col justify-between transition-colors sm:min-h-[110px] sm:p-2.5 ${
+                      className={`flex min-h-[64px] min-w-0 flex-col justify-between rounded-lg border p-1 transition-colors sm:min-h-[110px] sm:p-2.5 ${
                         matchingPost
                           ? "border-blue-500/40 bg-blue-950/20 cursor-pointer hover:border-blue-400"
                           : "border-slate-800/80 bg-slate-950/40 hover:border-slate-700"
@@ -174,26 +174,26 @@ export default function ContentCalendarPage() {
                       onClick={() => matchingPost && openEditModal(matchingPost)}
                     >
                       <div className="flex items-center justify-between">
-                        <span className={`text-xs font-semibold ${matchingPost ? "text-blue-400" : "text-slate-400"}`}>
+                        <span className={`text-[10px] font-semibold sm:text-xs ${matchingPost ? "text-blue-300" : "text-slate-400"}`}>
                           {dayNum}
                         </span>
                         {matchingPost && (
-                          <Badge variant={matchingPost.status === 'Scheduled' ? 'default' : 'warning'} className="text-[10px] px-1.5 py-0">
+                          <Badge variant={matchingPost.status === 'Scheduled' ? 'default' : 'warning'} className="hidden px-1.5 py-0 text-[9px] sm:inline-flex">
                             {matchingPost.status}
                           </Badge>
                         )}
                       </div>
                       {matchingPost ? (
-                        <div className="space-y-1 mt-2">
-                          <p className="text-[11px] font-medium text-slate-200 line-clamp-2 leading-tight">
+                        <div className="mt-1 space-y-1 sm:mt-2">
+                          <p className="line-clamp-2 break-words text-[9px] font-medium leading-tight text-slate-200 sm:text-[11px]">
                             {matchingPost.title}
                           </p>
-                          <p className="text-[10px] text-slate-400 flex items-center gap-1">
+                          <p className="hidden items-center gap-1 text-[10px] text-slate-400 sm:flex">
                             <Clock className="h-3 w-3" /> {formatDateForDisplay(matchingPost.scheduled_at)}
                           </p>
                         </div>
                       ) : (
-                        <span className="text-[10px] text-slate-600 italic">No posts</span>
+                        <span className="hidden text-[10px] italic text-slate-600 sm:inline">No posts</span>
                       )}
                     </div>
                   );
@@ -215,9 +215,9 @@ export default function ContentCalendarPage() {
               </div>
             ) : (
               scheduledPosts.map((post) => (
-                <div key={post.id} className="flex items-center justify-between p-4 rounded-xl border border-slate-800 bg-slate-950/50">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
+                <div key={post.id} className="flex flex-col gap-3 rounded-xl border border-slate-700/60 bg-slate-950/30 p-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="min-w-0 space-y-1">
+                    <div className="flex flex-wrap items-center gap-2">
                       <h4 className="text-sm font-semibold text-slate-100">{post.title}</h4>
                       <Badge variant="secondary">{post.status}</Badge>
                     </div>
@@ -254,7 +254,7 @@ export default function ContentCalendarPage() {
               onChange={(e) => setTitle(e.target.value)}
             />
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="space-y-2">
               <label className="text-xs font-medium text-slate-300">Date</label>
               <Input

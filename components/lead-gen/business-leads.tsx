@@ -568,8 +568,8 @@ function ContactManager({
             <ContactRow key={contact.id} contact={contact} onSave={onSave} onDelete={onDelete} companyId={company.id} />
           ))}
         </div>
-        <div className="border-t border-slate-200 pt-4">
-          <h4 className="mb-3 text-sm font-semibold text-slate-800">Add decision-maker contact</h4>
+        <div className="border-t border-slate-700/70 pt-4">
+          <h4 className="mb-3 text-sm font-semibold text-slate-200">Add decision-maker contact</h4>
           <ContactForm onSave={(values) => onSave(company.id, values)} />
         </div>
         <p className="text-xs text-slate-500">
@@ -594,7 +594,7 @@ function ContactRow({
   const [isEditing, setIsEditing] = useState(false);
   if (isEditing) {
     return (
-      <div className="rounded-lg border border-slate-200 p-3">
+      <div className="rounded-xl border border-slate-700/70 bg-slate-950/30 p-3">
         <ContactForm
           initial={{
             full_name: contact.full_name,
@@ -616,9 +616,9 @@ function ContactRow({
   }
 
   return (
-    <div className="flex items-start justify-between gap-3 rounded-lg border border-slate-200 p-3">
+    <div className="flex items-start justify-between gap-3 rounded-xl border border-slate-700/70 bg-slate-950/30 p-3">
       <div className="min-w-0">
-        <p className="font-medium text-slate-800">{contact.full_name}</p>
+        <p className="font-medium text-slate-200">{contact.full_name}</p>
         <p className="text-xs text-slate-500">
           {contact.job_title || "Role not provided"} · {contact.source_type} · {contact.verification_status}
         </p>
@@ -685,13 +685,13 @@ function ContactForm({
         <select
           value={values.verification_status}
           onChange={(event) => update("verification_status", event.target.value as ContactFormValues["verification_status"])}
-          className="h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-800"
+          className="h-10 w-full rounded-lg border border-slate-700/80 bg-slate-950/50 px-3 text-sm text-slate-100"
         >
           <option value="Unverified">Unverified</option>
           <option value="Verified">Verified</option>
         </select>
       </label>
-      {error && <p className="text-xs text-red-600">{error}</p>}
+      {error && <p className="text-xs text-red-300">{error}</p>}
       <div className="flex justify-end gap-2">
         {onCancel && <Button type="button" variant="outline" size="sm" onClick={onCancel}>Cancel</Button>}
         <Button type="submit" size="sm" disabled={isSubmitting}>
@@ -775,13 +775,13 @@ function CompanyFormModal({
             <select
               value={values.company_size}
               onChange={(event) => update("company_size", event.target.value as CompanyFormValues["company_size"])}
-              className="h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-800"
+              className="h-10 w-full rounded-lg border border-slate-700/80 bg-slate-950/50 px-3 text-sm text-slate-100"
             >
               <option value="">Select size</option>
               {COMPANY_SIZE_RANGES.map((size) => <option key={size} value={size}>{size}</option>)}
             </select>
           </label>
-          {error && <p className="text-sm text-red-600">{error}</p>}
+          {error && <p className="text-sm text-red-300">{error}</p>}
           <Button type="submit" disabled={isSubmitting} className="w-full">
             {isSubmitting ? "Saving..." : company ? "Save changes" : "Save company"}
           </Button>
@@ -806,7 +806,7 @@ function CompanyImport({
 }) {
   return (
     <>
-      <label className="inline-flex h-10 cursor-pointer items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50">
+      <label className="inline-flex h-10 cursor-pointer items-center justify-center gap-2 rounded-lg border border-slate-700/80 bg-slate-900 px-4 text-sm font-medium text-slate-200 transition-colors hover:bg-slate-800">
         <Upload className="h-4 w-4" /> Import CSV
         <input
           type="file"
@@ -824,17 +824,17 @@ function CompanyImport({
             <p className="text-sm text-slate-500">
               Review the first rows before import. Company name is required; unsupported company sizes will be reported as failures.
             </p>
-            <div className="max-h-80 overflow-auto rounded-lg border border-slate-200">
+            <div className="max-h-80 overflow-auto rounded-xl border border-slate-700/70">
               <table className="w-full min-w-[700px] text-left text-xs">
-                <thead className="sticky top-0 bg-slate-100 text-slate-600">
+                <thead className="sticky top-0 bg-slate-800 text-slate-300">
                   <tr>{["Row", "Company name", "Website", "Industry", "Location", "Company size"].map((header) => <th key={header} className="p-2">{header}</th>)}</tr>
                 </thead>
                 <tbody>
                   {rows.slice(0, 100).map((row, index) => (
-                    <tr key={`${row.rowNumber}-${index}`} className="border-t border-slate-100">
+                    <tr key={`${row.rowNumber}-${index}`} className="border-t border-slate-700/60">
                       <td className="p-2 text-slate-500">{row.rowNumber}</td>
                       {[row.name, row.website, row.industry, row.location, row.company_size].map((value, cell) => (
-                        <td key={cell} className="max-w-48 truncate p-2 text-slate-700">{value || "—"}</td>
+                        <td key={cell} className="max-w-48 truncate p-2 text-slate-300">{value || "—"}</td>
                       ))}
                     </tr>
                   ))}
@@ -874,7 +874,7 @@ function FilterSelect({
       <select
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="h-10 w-full appearance-none rounded-lg border border-slate-200 bg-white px-3 pr-8 text-sm text-slate-800"
+        className="h-10 w-full appearance-none rounded-lg border border-slate-700/80 bg-slate-950/50 px-3 pr-8 text-sm text-slate-100"
       >
         <option value="">All {label.toLowerCase()}s</option>
         {options.map((option) => (

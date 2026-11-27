@@ -8,8 +8,8 @@ export const Card = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "rounded-xl border border-slate-200 bg-white p-5 text-slate-900 shadow-sm shadow-slate-900/[0.03]",
-      hoverEffect && "transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md hover:shadow-slate-900/[0.06]",
+      "rounded-2xl border border-slate-700/60 bg-slate-900/70 p-5 text-slate-100 shadow-lg shadow-black/[0.08] ring-1 ring-white/[0.015]",
+      hoverEffect && "transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-600 hover:bg-slate-900 hover:shadow-xl hover:shadow-black/20",
       className
     )}
     {...props}
@@ -21,21 +21,21 @@ export const CardHeader = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn("flex flex-col space-y-1.5 mb-4", className)} {...props} />
+  <div className={cn("mb-4 flex flex-col space-y-1.5", className)} {...props} />
 );
 
 export const CardTitle = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLHeadingElement>) => (
-  <h3 className={cn("font-semibold text-lg tracking-tight text-slate-900", className)} {...props} />
+  <h3 className={cn("text-lg font-semibold tracking-tight text-slate-100", className)} {...props} />
 );
 
 export const CardDescription = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLParagraphElement>) => (
-  <p className={cn("text-xs text-slate-500 font-normal leading-relaxed", className)} {...props} />
+  <p className={cn("text-sm font-normal leading-relaxed text-slate-400", className)} {...props} />
 );
 
 export const CardContent = ({
@@ -49,5 +49,5 @@ export const CardFooter = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn("mt-4 pt-3 border-t border-slate-200 flex items-center justify-between", className)} {...props} />
+  <div className={cn("mt-4 flex items-center justify-between border-t border-slate-700/70 pt-3", className)} {...props} />
 );

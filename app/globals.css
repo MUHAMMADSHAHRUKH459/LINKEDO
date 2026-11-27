@@ -2,26 +2,27 @@
 
 @layer base {
   :root {
-    --background: 210 20% 98%;
-    --foreground: 222 47% 11%;
-    --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
-    --primary: 217 78% 45%;
+    color-scheme: dark;
+    --background: 222 47% 7%;
+    --foreground: 213 31% 91%;
+    --card: 220 42% 11%;
+    --card-foreground: 213 31% 91%;
+    --popover: 220 42% 11%;
+    --popover-foreground: 213 31% 91%;
+    --primary: 217 91% 60%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 210 20% 96%;
-    --secondary-foreground: 222 47% 11%;
-    --muted: 210 20% 96%;
-    --muted-foreground: 215 16% 47%;
-    --accent: 210 20% 96%;
-    --accent-foreground: 222 47% 11%;
-    --destructive: 0 72% 45%;
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 213 31% 91%;
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 217 33% 17%;
+    --accent-foreground: 213 31% 91%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
-    --border: 214 20% 90%;
-    --input: 214 20% 90%;
-    --ring: 217 78% 45%;
-    --radius: 0.625rem;
+    --border: 217 32% 22%;
+    --input: 217 32% 22%;
+    --ring: 217 91% 60%;
+    --radius: 0.75rem;
   }
 }
 
@@ -29,17 +30,24 @@
   box-sizing: border-box;
 }
 
+html {
+  min-height: 100%;
+  background: #070f1c;
+}
+
 body {
   min-height: 100vh;
-  background-color: #f5f7fa;
-  color: #172b4d;
+  background:
+    radial-gradient(ellipse at 12% 0%, rgb(30 64 115 / 18%), transparent 34rem),
+    #070f1c;
+  color: #dce6f4;
   font-family: var(--font-geist-sans), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   overflow-x: hidden;
 }
 
 ::selection {
-  background: #dbeafe;
-  color: #172b4d;
+  background: rgb(37 99 235 / 45%);
+  color: #fff;
 }
 
 ::-webkit-scrollbar {
@@ -48,116 +56,54 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #0a1423;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #2a3a53;
   border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #405573;
 }
 
 .dashboard-shell {
-  background: #f5f7fa;
-  color: #172b4d;
+  min-height: 100vh;
+  background: #070f1c;
+  color: #dce6f4;
+}
+
+.dashboard-page {
+  min-width: 0;
 }
 
 .dashboard-page > div:first-child {
-  border-color: #e2e8f0;
+  border-color: rgb(148 163 184 / 16%);
 }
 
 .dashboard-page h1 {
-  color: #15243b;
+  color: #f3f7fc;
   letter-spacing: -0.035em;
 }
 
-.dashboard-page [class~="text-slate-100"],
-.dashboard-page [class~="text-slate-200"] {
-  color: #172b4d;
+.dashboard-page h2 {
+  letter-spacing: -0.025em;
 }
 
-.dashboard-page [class~="text-slate-300"] {
-  color: #475569;
+.dashboard-page input[type="checkbox"] {
+  accent-color: #3b82f6;
 }
 
-.dashboard-page [class~="text-slate-400"],
-.dashboard-page [class~="text-slate-500"] {
-  color: #64748b;
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
 }
 
-.dashboard-page [class~="text-slate-600"] {
-  color: #94a3b8;
-}
-
-.dashboard-page [class*="text-blue-400"],
-.dashboard-page [class*="text-blue-500"] {
-  color: #2563eb;
-}
-
-.dashboard-page [class*="text-emerald-400"],
-.dashboard-page [class*="text-emerald-500"] {
-  color: #047857;
-}
-
-.dashboard-page [class*="text-amber-400"],
-.dashboard-page [class*="text-amber-500"] {
-  color: #b45309;
-}
-
-.dashboard-page [class*="text-red-400"],
-.dashboard-page [class*="text-red-500"] {
-  color: #b91c1c;
-}
-
-.dashboard-page [class*="text-sky-400"] {
-  color: #0369a1;
-}
-
-.dashboard-page [class*="bg-slate-950"] {
-  background-color: #f8fafc;
-}
-
-.dashboard-page [class*="bg-slate-900"] {
-  background-color: #ffffff;
-}
-
-.dashboard-page [class*="bg-slate-800"] {
-  background-color: #f1f5f9;
-}
-
-.dashboard-page [class*="bg-blue-950"],
-.dashboard-page [class*="bg-indigo-950"] {
-  background-color: #eff6ff;
-}
-
-.dashboard-page [class*="from-blue-950"],
-.dashboard-page [class*="via-slate-900"],
-.dashboard-page [class*="to-indigo-950"] {
-  background-image: none;
-  background-color: #ffffff;
-}
-
-.dashboard-page [class*="border-slate-800"],
-.dashboard-page [class*="border-slate-700"],
-.dashboard-page [class*="border-slate-600"] {
-  border-color: #e2e8f0;
-}
-
-.dashboard-page [class*="border-blue-800"],
-.dashboard-page [class*="border-blue-500"] {
-  border-color: #bfdbfe;
-}
-
-.dashboard-page [class*="hover:bg-slate-900"]:hover,
-.dashboard-page [class*="hover:bg-slate-800"]:hover {
-  background-color: #f1f5f9;
-}
-
-.dashboard-page [class*="hover:border-slate-700"]:hover {
-  border-color: #cbd5e1;
+@media (max-width: 639px) {
+  .dashboard-page {
+    overflow-wrap: anywhere;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

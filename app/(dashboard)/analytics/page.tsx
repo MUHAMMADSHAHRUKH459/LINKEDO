@@ -5,7 +5,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 
 export default function AnalyticsPage() {
   return (
-    <div className="space-y-8 animate-in fade-in duration-300">
+    <div className="space-y-7 animate-in fade-in duration-300">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-800/80">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-slate-100">Analytics</h1>
@@ -17,7 +17,7 @@ export default function AnalyticsPage() {
         <Card className="p-5">
           <div className="flex items-start justify-between">
             <p className="text-xs font-medium text-slate-400">Total Reach</p>
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 text-blue-700">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-blue-400/15 bg-blue-500/10 text-blue-300">
               <Eye className="h-4 w-4" />
             </div>
           </div>
@@ -29,7 +29,7 @@ export default function AnalyticsPage() {
         <Card className="p-5">
           <div className="flex items-start justify-between">
             <p className="text-xs font-medium text-slate-400">Total Engagements</p>
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 text-blue-700">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-blue-400/15 bg-blue-500/10 text-blue-300">
               <TrendingUp className="h-4 w-4" />
             </div>
           </div>
@@ -41,7 +41,7 @@ export default function AnalyticsPage() {
         <Card className="p-5">
           <div className="flex items-start justify-between">
             <p className="text-xs font-medium text-slate-400">Profile Conversion</p>
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 text-blue-700">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-blue-400/15 bg-blue-500/10 text-blue-300">
               <Users className="h-4 w-4" />
             </div>
           </div>
@@ -55,7 +55,7 @@ export default function AnalyticsPage() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <BarChart3 className="h-4 w-4 text-blue-700" />
+            <BarChart3 className="h-4 w-4 text-blue-300" />
             Content Performance Breakdown
           </CardTitle>
           <CardDescription>Impressions and likes per published post</CardDescription>
@@ -66,7 +66,7 @@ export default function AnalyticsPage() {
             { title: "The Future of Next.js App Router Architecture", impressions: "12.8K", likes: "285", comments: "38", rate: "7.9%" },
             { title: "Building High-Performance Engineering Teams", impressions: "9.4K", likes: "192", comments: "21", rate: "6.4%" },
           ].map((item, i) => (
-            <div key={i} className="flex flex-col gap-4 rounded-lg border border-slate-200 bg-slate-50 p-4 sm:flex-row sm:items-center sm:justify-between">
+            <div key={i} className="flex flex-col gap-4 rounded-xl border border-slate-700/60 bg-slate-950/30 p-4 sm:flex-row sm:items-center sm:justify-between">
               <div className="min-w-0 space-y-1">
                 <h4 className="text-sm font-medium text-slate-200">{item.title}</h4>
                 <p className="text-xs text-slate-400">Impressions: {item.impressions} • Comments: {item.comments}</p>
@@ -74,10 +74,10 @@ export default function AnalyticsPage() {
               <div className="w-full shrink-0 sm:w-40">
                 <div className="mb-1.5 flex items-center justify-between">
                   <span className="text-[10px] font-medium text-slate-500">Engagement rate</span>
-                  <span className="text-sm font-semibold text-blue-700">{item.rate}</span>
+                  <span className="text-sm font-semibold text-blue-300">{item.rate}</span>
                 </div>
                 <div
-                  className="h-1.5 overflow-hidden rounded-full bg-slate-200"
+                  className="h-1.5 overflow-hidden rounded-full bg-slate-800"
                   role="img"
                   aria-label={`${item.rate} engagement rate`}
                 >

@@ -22,6 +22,8 @@ export function Modal({
   children,
   className,
 }: ModalProps) {
+  const titleId = React.useId();
+
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -40,22 +42,24 @@ export function Modal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Backdrop */}
       <div
-        className=        "fixed inset-0 bg-slate-950/45 backdrop-blur-sm transition-opacity animate-in fade-in duration-200"
+        aria-hidden="true"
+        className="fixed inset-0 bg-slate-950/75 backdrop-blur-sm transition-opacity animate-in fade-in duration-200"
         onClick={onClose}
       />
 
-      {/* Modal Dialog */}
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
         className={cn(
-          "relative z-50 w-full max-w-lg rounded-xl border border-slate-200 bg-white p-6 text-slate-900 shadow-2xl shadow-slate-900/15 animate-in zoom-in-95 duration-200",
+          "relative z-50 max-h-[calc(100vh-2rem)] w-full max-w-lg overflow-y-auto rounded-2xl border border-slate-700/80 bg-[#0d192b] p-5 text-slate-100 shadow-2xl shadow-black/50 animate-in zoom-in-95 duration-200 sm:p-6",
           className
         )}
       >
-        <div className="mb-4 flex items-center justify-between border-b border-slate-200 pb-4">
+        <div className="mb-4 flex items-center justify-between border-b border-slate-700/70 pb-4">
           <div>
-            <h2 className="text-lg font-semibold text-slate-900">{title}</h2>
+            <h2 id={titleId} className="text-lg font-semibold text-slate-100">{title}</h2>
             {description && (
               <p className="mt-0.5 text-xs text-slate-500">{description}</p>
             )}
@@ -64,7 +68,8 @@ export function Modal({
             variant="ghost"
             size="icon"
             onClick={onClose}
-            className="h-8 w-8 text-slate-500 hover:text-slate-900"
+            aria-label="Close dialog"
+            className="h-8 w-8 text-slate-500 hover:text-slate-100"
           >
             <X className="h-4 w-4" />
           </Button>

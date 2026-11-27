@@ -117,7 +117,7 @@ const handleSaveDraft = async () => {
   };
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-300">
+    <div className="space-y-7 animate-in fade-in duration-300">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-800/80">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-slate-100">Content Studio</h1>
@@ -144,13 +144,13 @@ const handleSaveDraft = async () => {
               )}
               <div className="space-y-2">
                 <label className="text-xs font-medium text-slate-300">Topic or Core Idea</label>
-                <div className="flex gap-2">
+                <div className="flex flex-col gap-2 sm:flex-row">
                   <Input
                     placeholder="e.g., The benefits of micro-frontends in enterprise apps..."
                     value={topic}
                     onChange={(e) => setTopic(e.target.value)}
                   />
-                  <Button variant="glow" onClick={handleSaveDraft} disabled={isGenerating || !topic}>
+                  <Button variant="glow" onClick={handleSaveDraft} disabled={isGenerating || !topic} className="shrink-0">
                     {isGenerating ? (
                       <Loader2 className="h-4 w-4 animate-spin" />
                     ) : (
@@ -186,6 +186,7 @@ const handleSaveDraft = async () => {
                     <button
                       key={t}
                       onClick={() => setTone(t)}
+                      aria-pressed={tone === t}
                       className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                         tone === t
                           ? "bg-blue-600 text-white border border-blue-500"
@@ -231,11 +232,11 @@ const handleSaveDraft = async () => {
                 />
               </div>
 
-              <div className="flex items-center justify-between pt-2">
+              <div className="flex flex-col gap-3 border-t border-slate-700/60 pt-4 sm:flex-row sm:items-center sm:justify-between">
                 <span className="text-xs text-slate-500">
                   {postContent.length} characters • Optimized for LinkedIn algorithm
                 </span>
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                   <Button variant="secondary" size="md" onClick={handleSaveDraft}>Save as Draft</Button>
                   <Button variant="default" size="md" onClick={handlePublish} disabled={isPublishing || !postContent}>
                     {isPublishing ? (
@@ -262,10 +263,16 @@ const handleSaveDraft = async () => {
               <CardDescription>Recent drafts and published content</CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
-              {drafts.map((item) => (
+              {drafts.length === 0 ? (
+                <div className="rounded-xl border border-dashed border-slate-700/70 px-4 py-8 text-center">
+                  <History className="mx-auto h-5 w-5 text-slate-600" />
+                  <p className="mt-2 text-sm font-medium text-slate-300">Your post library is ready</p>
+                  <p className="mt-1 text-xs text-slate-500">Saved drafts and published posts will appear here.</p>
+                </div>
+              ) : drafts.map((item) => (
                 <div
                   key={item.id}
-	                  onClick={() => {
+                  onClick={() => {
                         setTopic(item.title);
                         setPostContent(item.content);
                         setPostId(item.id);

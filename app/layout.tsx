@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "LINKEDO",
-  description: "The ultimate professional dashboard for LinkedIn.",
+  title: "LINKEDO | LinkedIn AI Studio",
+  description: "A focused workspace for LinkedIn content, engagement, networking, and lead management.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

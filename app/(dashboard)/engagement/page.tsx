@@ -221,11 +221,11 @@ export default function EngagementPage() {
   const visibleComments = comments;
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-300">
+    <div className="space-y-7 animate-in fade-in duration-300">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-800/80">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-slate-100">Engagement Assistant</h1>
-          <p className="text-slate-400 mt-1 text-sm">
+          <p className="mt-1 max-w-3xl text-sm leading-6 text-slate-400">
             Review comments, refine AI reply suggestions, and publish only after your approval. Publishing requires LinkedIn&apos;s approved w_member_social_feed permission.
           </p>
         </div>
@@ -291,7 +291,7 @@ export default function EngagementPage() {
             maxLength={500}
           />
           {manualError && <p className="text-sm text-red-400">{manualError}</p>}
-          <div className="flex justify-end">
+          <div className="flex justify-end border-t border-slate-700/60 pt-3">
             <Button
               variant="glow"
               size="sm"

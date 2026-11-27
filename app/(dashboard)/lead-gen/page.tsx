@@ -132,7 +132,7 @@ export default function LeadGenPage() {
   };
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-300">
+    <div className="space-y-7 animate-in fade-in duration-300">
       {/* Lead Generation */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-800/80">
         <div>
@@ -141,48 +141,82 @@ export default function LeadGenPage() {
         </div>
       </div>
 
-      <BusinessLeads />
+      <div className="rounded-2xl border border-slate-700/60 bg-slate-900/35 p-4 sm:p-6">
+        <BusinessLeads />
+      </div>
 
       {/* Job Leads Search Section */}
-      <div className="pb-6 border-b border-slate-800/80">
-        <h2 className="text-2xl font-bold mb-4 text-slate-100">Job Leads Finder</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-          <Input
-            value={searchParams.keywords}
-            onChange={(e) => setSearchParams({ ...searchParams, keywords: e.target.value })}
-            placeholder="Keywords (e.g., Software Engineer)"
-          />
-          <Input
-            value={searchParams.location}
-            onChange={(e) => setSearchParams({ ...searchParams, location: e.target.value })}
-            placeholder="Location (e.g., Remote, New York)"
-          />
-          <Select
-            value={searchParams.employmentType}
-            onValueChange={(value: string) => setSearchParams({ ...searchParams, employmentType: value as EmploymentType })}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Employment Type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="Any">Any</SelectItem>
-              <SelectItem value="Full-time">Full-time</SelectItem>
-              <SelectItem value="Part-time">Part-time</SelectItem>
-              <SelectItem value="Contract">Contract</SelectItem>
-              <SelectItem value="Internship">Internship</SelectItem>
-            </SelectContent>
-          </Select>
-          <Input
-            value={searchParams.boardTokens}
-            onChange={(e) => setSearchParams({ ...searchParams, boardTokens: e.target.value })}
-            placeholder="Greenhouse Board Tokens (comma-separated)"
-            className="col-span-full"
-          />
+      <section className="space-y-5 rounded-2xl border border-blue-400/15 bg-gradient-to-br from-blue-500/[0.07] via-slate-900/60 to-slate-900/50 p-4 sm:p-6">
+        <div className="flex items-start gap-3">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-blue-400/20 bg-blue-500/10 text-blue-200">
+            <Briefcase className="h-5 w-5" />
+          </div>
+          <div>
+            <h2 className="text-xl font-semibold text-slate-100">Greenhouse Job Finder</h2>
+            <p className="mt-1 max-w-2xl text-sm leading-6 text-slate-400">
+              Search public Greenhouse boards and save listings separately from your business leads.
+            </p>
+          </div>
         </div>
-        <Button onClick={handleJobSearch} disabled={isLoadingJobs}>
-          {isLoadingJobs ? 'Searching...' : 'Find Jobs'}
-        </Button>
-      </div>
+
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <label className="space-y-1.5 text-xs font-medium text-slate-400">
+            Keywords
+            <Input
+              aria-label="Job keywords"
+              value={searchParams.keywords}
+              onChange={(e) => setSearchParams({ ...searchParams, keywords: e.target.value })}
+              placeholder="e.g., Software Engineer"
+            />
+          </label>
+          <label className="space-y-1.5 text-xs font-medium text-slate-400">
+            Location
+            <Input
+              aria-label="Job location"
+              value={searchParams.location}
+              onChange={(e) => setSearchParams({ ...searchParams, location: e.target.value })}
+              placeholder="e.g., Remote, New York"
+            />
+          </label>
+          <label className="space-y-1.5 text-xs font-medium text-slate-400">
+            Employment type
+            <Select
+              aria-label="Employment type"
+              value={searchParams.employmentType}
+              onValueChange={(value: string) => setSearchParams({ ...searchParams, employmentType: value as EmploymentType })}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Employment Type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Any">Any</SelectItem>
+                <SelectItem value="Full-time">Full-time</SelectItem>
+                <SelectItem value="Part-time">Part-time</SelectItem>
+                <SelectItem value="Contract">Contract</SelectItem>
+                <SelectItem value="Internship">Internship</SelectItem>
+              </SelectContent>
+            </Select>
+          </label>
+          <label className="space-y-1.5 text-xs font-medium text-slate-400 md:col-span-2 xl:col-span-3">
+            Greenhouse board tokens
+            <Input
+              aria-label="Greenhouse board tokens"
+              value={searchParams.boardTokens}
+              onChange={(e) => setSearchParams({ ...searchParams, boardTokens: e.target.value })}
+              placeholder="Comma-separated board tokens"
+            />
+            <span className="block text-[11px] font-normal text-slate-500">
+              Optional. Add the company board token(s) to search specific public Greenhouse boards.
+            </span>
+          </label>
+        </div>
+        <div className="flex flex-col gap-3 border-t border-slate-700/50 pt-4 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-xs text-slate-500">Search results can be reviewed and saved to your job leads.</p>
+          <Button onClick={handleJobSearch} disabled={isLoadingJobs} className="w-full sm:w-auto">
+            {isLoadingJobs ? 'Searching Greenhouse...' : 'Find Jobs'}
+          </Button>
+        </div>
+      </section>
 
       {/* Feedback Messages */}
       {successMessage && (
@@ -213,20 +247,31 @@ export default function LeadGenPage() {
           <span>{fetchErrorJobs}</span>
         </div>
       ) : searchResults.length > 0 ? (
-        <div className="grid grid-cols-1 gap-4">
+        <section className="space-y-3">
+          <div className="flex items-end justify-between gap-3">
+            <div>
+              <h3 className="text-base font-semibold text-slate-100">Search results</h3>
+              <p className="mt-1 text-xs text-slate-500">{searchResults.length} job listings found</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 gap-3">
           {searchResults.map((job, index) => (
-            <Card key={index} className="p-4 bg-slate-900 border-slate-800">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <h4 className="font-bold text-slate-100">{job.job_title}</h4>
-                  <p className="text-slate-400">{job.employer_name}</p>
-                  <p className="text-slate-400 text-sm">{job.location}</p>
-                  <Badge variant="secondary" className="mt-2 mr-2">{job.employment_type}</Badge>
-                  <Badge variant={job.verification_status === 'Verified' ? 'default' : 'secondary'}>
-                    {job.verification_status}
-                  </Badge>
+            <Card key={index} className="p-4 sm:p-5">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                <div className="min-w-0">
+                  <h4 className="text-base font-semibold text-slate-100">{job.job_title}</h4>
+                  <p className="mt-1 text-sm text-slate-300">{job.employer_name}</p>
+                  <p className="mt-1 text-xs text-slate-500">{job.location}</p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <Badge variant="secondary">{job.employment_type}</Badge>
+                    {job.verification_status && (
+                      <Badge variant={job.verification_status === 'Verified' ? 'success' : 'secondary'}>
+                        {job.verification_status}
+                      </Badge>
+                    )}
+                  </div>
                 </div>
-                <div className="flex flex-col items-end gap-2">
+                <div className="flex shrink-0 items-center gap-2 sm:flex-col sm:items-end">
                   <a
                     href={job.source_url}
                     target="_blank"
@@ -240,14 +285,21 @@ export default function LeadGenPage() {
               </div>
             </Card>
           ))}
-        </div>
+          </div>
+        </section>
       ) : (
-        <p className="text-slate-400 text-center py-8">No search results found.</p>
+        <div className="rounded-2xl border border-dashed border-slate-700/70 px-4 py-8 text-center">
+          <p className="text-sm font-medium text-slate-300">No search results yet</p>
+          <p className="mt-1 text-xs text-slate-500">Enter search criteria above and run a Greenhouse board search.</p>
+        </div>
       )}
 
       {/* Saved Job Leads */}
-      <div>
-        <h3 className="text-xl font-bold mb-4 text-slate-100">Saved Job Leads</h3>
+      <section className="space-y-4 border-t border-slate-800/80 pt-6">
+        <div>
+          <h3 className="text-lg font-semibold text-slate-100">Saved job leads</h3>
+          <p className="mt-1 text-xs text-slate-500">Verify or remove listings you have saved from Greenhouse.</p>
+        </div>
         {isLoadingJobs ? (
         <div className="grid grid-cols-1 gap-4">
           {[...Array(3)].map((_, i) => (
@@ -264,34 +316,34 @@ export default function LeadGenPage() {
       ) : jobLeads.length > 0 ? (
         <div className="grid grid-cols-1 gap-4">
           {jobLeads.map((job) => (
-            <Card key={job.id} className="p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-900 border-slate-800">
-              <div className="flex items-center gap-4">
-                <div className="h-10 w-10 rounded-lg bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400 font-bold">
+            <Card key={job.id} className="flex flex-col justify-between gap-4 p-4 sm:flex-row sm:items-center sm:p-5">
+              <div className="flex min-w-0 items-center gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-blue-400/15 bg-blue-500/10 text-blue-300">
                   <Briefcase className="h-5 w-5" />
                 </div>
-                <div>
-                  <h4 className="font-bold text-slate-100">{job.job_title}</h4>
-                  <p className="text-xs text-slate-400">{job.employer_name} • {job.location}</p>
+                <div className="min-w-0">
+                  <h4 className="font-semibold text-slate-100">{job.job_title}</h4>
+                  <p className="mt-1 text-xs text-slate-400">{job.employer_name} · {job.location}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-4">
-                <Button onClick={() => handleVerifyJobLead(job.id)} size="sm">
+              <div className="flex flex-wrap items-center gap-2 sm:justify-end">
+                <Button onClick={() => handleVerifyJobLead(job.id)} size="sm" className="order-2 sm:order-1">
                   Verify
                 </Button>
-                <Badge variant={job.verification_status === 'Verified' ? 'default' : 'secondary'}>
+                <Badge variant={job.verification_status === 'Verified' ? 'success' : 'secondary'} className="order-1 sm:order-2">
                   {job.verification_status}
                 </Badge>
-                <Button variant="ghost" size="icon" onClick={() => handleDeleteJobLead(job.id)} className="text-slate-400 hover:text-red-400">
+                <Button variant="ghost" size="icon" aria-label={`Delete ${job.job_title}`} onClick={() => handleDeleteJobLead(job.id)} className="order-3 text-slate-400 hover:text-red-300">
                   <Trash2 className="h-4 w-4" />
                 </Button>
               </div>
             </Card>
           ))}
-        </div>
+          </div>
       ) : (
         <p className="text-slate-400 text-center py-8">No saved job leads yet.</p>
       )}
-      </div>
+      </section>
 
     </div>
   );

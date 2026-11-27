@@ -46,16 +46,16 @@ export default function OverviewPage() {
   }, []);
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-300">
+    <div className="space-y-7 animate-in fade-in duration-300">
       {/* Top Banner / Welcome */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-800/80">
-        <div>
+        <div className="min-w-0">
           <h1 className="text-3xl font-bold tracking-tight text-slate-100">Overview</h1>
           <p className="text-slate-400 mt-1 text-sm">
             Welcome back. Real-time metrics for your connected LINKEDO dashboard.
           </p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 sm:shrink-0">
           <Link href="/content-studio">
             <Button variant="glow" size="md">
               <Plus className="h-4 w-4" /> Create New Post
@@ -82,7 +82,7 @@ export default function OverviewPage() {
           <Card key={i} hoverEffect className="relative overflow-hidden">
             <div className="flex items-center justify-between">
               <p className="text-xs font-medium text-slate-400">{stat.title}</p>
-              <div className="h-8 w-8 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-blue-400/15 bg-blue-500/10 text-blue-300">
                 <stat.icon className="h-4 w-4" />
               </div>
             </div>
@@ -112,13 +112,13 @@ export default function OverviewPage() {
             </CardHeader>
             <CardContent className="space-y-4 pt-2">
               {loading ? (
-                <div className="text-sm text-slate-500 text-center py-6">Loading recent activity...</div>
+                <div className="rounded-xl border border-dashed border-slate-700/70 py-8 text-center text-sm text-slate-500">Loading recent activity...</div>
               ) : recentActivity.length === 0 ? (
-                <div className="text-sm text-slate-500 text-center py-6">No recent activity recorded yet.</div>
+                <div className="rounded-xl border border-dashed border-slate-700/70 px-4 py-8 text-center text-sm text-slate-500">No recent activity recorded yet.</div>
               ) : (
                 recentActivity.map((act) => (
-                  <div key={act.id} className="flex items-start justify-between p-3.5 rounded-lg border border-slate-800/60 bg-slate-950/40 hover:border-slate-700 transition-colors">
-                    <div className="flex items-start gap-3">
+                  <div key={act.id} className="flex flex-col gap-3 rounded-xl border border-slate-700/50 bg-slate-950/30 p-4 transition-colors hover:border-slate-600/80 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex min-w-0 items-start gap-3">
                       <div className="mt-0.5 h-7 w-7 rounded-full bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400 shrink-0">
                         <FileText className="h-3.5 w-3.5" />
                       </div>
